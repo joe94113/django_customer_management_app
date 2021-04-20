@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
+
+    'django_filters',  # pip install django-filter
 ]
 
 MIDDLEWARE = [
