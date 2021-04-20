@@ -1,12 +1,61 @@
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm  # 用戶創建的表格
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import *
-from .forms import OrderForm
+from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
 
 
 # Create your views here.
+def registerPage(request):
+    if request.user.is_authenticated:  # 如果已通過身分驗證
+        return redirect('home')
+    else:
+        form = CreateUserForm()
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():  # 如果表單已驗證
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+
+                return redirect('login')
+
+        context = {'form': form}
+        return render(request, 'accounts/register.html', context)
+
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')  # 收到前端input
+            password = request.POST.get('password')  # 收到前端input
+
+            user = authenticate(request, username=username, password=password)  # 身份驗證
+
+            if user is not None:  # 如果user存在登入
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
+
+        context = {}
+        return render(request, 'accounts/register.html', context)
+    
+    
+def logoutUser(request):
+    logout(request)
+    return redirect('register')
+
+
+@login_required(login_url='register')
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -27,12 +76,14 @@ def home(request):
     return render(request, 'accounts/dashboard.html', context=context)
 
 
+@login_required(login_url='register')
 def product(request):
     products = Product.objects.all()
     context = {'products': products}
     return render(request, 'accounts/products.html', context=context)
 
 
+@login_required(login_url='register')
 def customer(request, pk):
     customer = Customer.objects.get(id=pk)
 
@@ -51,7 +102,9 @@ def customer(request, pk):
     return render(request, 'accounts/customer.html', context=context)
 
 
+@login_required(login_url='register')
 def createOrder(request, pk):
+    # https://docs.djangoproject.com/zh-hans/3.2/topics/forms/modelforms/#inline-formsets
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10)  # 允許產品跟狀態
     customer = Customer.objects.get(id=pk)
     formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
@@ -69,6 +122,7 @@ def createOrder(request, pk):
     return render(request, 'accounts/order_form.html', context)
 
 
+@login_required(login_url='register')
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)  # 訂單表單實例等於該訂單
@@ -84,6 +138,7 @@ def updateOrder(request, pk):
     return render(request, 'accounts/order_form.html', context)
 
 
+@login_required(login_url='register')
 def deleteOrder(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == 'POST':
