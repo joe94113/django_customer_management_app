@@ -26,6 +26,11 @@ def registerPage(request):
             group = Group.objects.get(name="customer")
             user.groups.add(group)  # 新建立用戶自動加入group = customer
 
+            Customer.objects.create(
+                user=user,
+                name=user.username,
+            )
+
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('login')
@@ -79,8 +84,22 @@ def home(request):
     return render(request, 'accounts/dashboard.html', context=context)
 
 
+@login_required(login_url='register')
+@allowed_users(allowed_roles=["customer"])
 def userPage(request):
-    context = {}
+    orders = request.user.customer.order_set.all()
+    print("Orders:", orders)
+
+    total_orders = orders.count()  # 訂單總數
+    delivered = orders.filter(status='Delivered').count()
+    pending = orders.filter(status='Pending').count()
+
+    context = {
+        'orders': orders,
+        'total_orders': total_orders,
+        'delivered': delivered,
+        'pending': pending
+    }
     return render(request, 'accounts/user.html', context=context)
 
 
