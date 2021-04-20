@@ -5,57 +5,60 @@ from django.contrib.auth.forms import UserCreationForm  # 用戶創建的表格
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 from .models import *
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 
 # Create your views here.
+@unauthenticated_user
 def registerPage(request):
-    if request.user.is_authenticated:  # 如果已通過身分驗證
-        return redirect('home')
-    else:
-        form = CreateUserForm()
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():  # 如果表單已驗證
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():  # 如果表單已驗證
+            user = form.save()
+            username = form.cleaned_data.get('username')
 
-                return redirect('login')
+            group = Group.objects.get(name="customer")
+            user.groups.add(group)  # 新建立用戶自動加入group = customer
 
-        context = {'form': form}
-        return render(request, 'accounts/register.html', context)
+            messages.success(request, 'Account was created for ' + username)
+
+            return redirect('login')
+
+    context = {'form': form}
+    return render(request, 'accounts/register.html', context)
 
 
+@unauthenticated_user
 def loginPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')  # 收到前端input
-            password = request.POST.get('password')  # 收到前端input
+    if request.method == 'POST':
+        username = request.POST.get('username')  # 收到前端input
+        password = request.POST.get('password')  # 收到前端input
 
-            user = authenticate(request, username=username, password=password)  # 身份驗證
+        user = authenticate(request, username=username, password=password)  # 身份驗證
 
-            if user is not None:  # 如果user存在登入
-                login(request, user)
-                return redirect('home')
-            else:
-                messages.info(request, 'Username OR password is incorrect')
+        if user is not None:  # 如果user存在登入
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, 'Username OR password is incorrect')
 
-        context = {}
-        return render(request, 'accounts/register.html', context)
-    
-    
+    context = {}
+    return render(request, 'accounts/register.html', context)
+
+
 def logoutUser(request):
     logout(request)
     return redirect('register')
 
 
 @login_required(login_url='register')
+@admin_only
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -76,7 +79,13 @@ def home(request):
     return render(request, 'accounts/dashboard.html', context=context)
 
 
+def userPage(request):
+    context = {}
+    return render(request, 'accounts/user.html', context=context)
+
+
 @login_required(login_url='register')
+@allowed_users(allowed_roles=["admin"])
 def product(request):
     products = Product.objects.all()
     context = {'products': products}
@@ -84,6 +93,7 @@ def product(request):
 
 
 @login_required(login_url='register')
+@allowed_users(allowed_roles=["admin"])
 def customer(request, pk):
     customer = Customer.objects.get(id=pk)
 
@@ -103,6 +113,7 @@ def customer(request, pk):
 
 
 @login_required(login_url='register')
+@allowed_users(allowed_roles=["admin"])
 def createOrder(request, pk):
     # https://docs.djangoproject.com/zh-hans/3.2/topics/forms/modelforms/#inline-formsets
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10)  # 允許產品跟狀態
@@ -123,6 +134,7 @@ def createOrder(request, pk):
 
 
 @login_required(login_url='register')
+@allowed_users(allowed_roles=["admin"])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)  # 訂單表單實例等於該訂單
@@ -144,6 +156,6 @@ def deleteOrder(request, pk):
     if request.method == 'POST':
         order.delete()
         return redirect('/')
-    
+
     context = {'item': order}
     return render(request, 'accounts/delete.html', context)

@@ -15,12 +15,15 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
+      <!--DOC:https://docs.djangoproject.com/en/3.2/ref/contrib/auth/-->
+      {% if request.user.is_staff %}<!--如果用戶是工作人員，指定該用戶是否可以訪問管理站點。-->
       <li class="nav-item active">
           <a class="nav-link" href="{% url 'home' %}">Dashboard </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'product' %}">Products</a>
       </li>
+      {% endif %}
     </ul>
   </div>
 

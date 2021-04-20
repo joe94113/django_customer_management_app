@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     
     path('', views.home, name='home'),
+    path('user/', views.userPage, name='user-page'),
     path('product/', views.product, name='product'),
     path('customer/<str:pk>/', views.customer, name='customer'),
     
