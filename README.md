@@ -8,7 +8,7 @@
 
 3.搜尋商品/新增刪除編輯商品(CRUD)
 
-
+4.運用AWS RDS託管資料庫(PostgresSQL)
 [Django DOCS](https://docs.djangoproject.com/zh-hans/3.1/)
 
 [PostgresSQL](https://www.postgresql.org/)
