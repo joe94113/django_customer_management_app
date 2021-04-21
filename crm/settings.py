@@ -131,6 +131,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'a106510361@g2.usc.edu.tw'
-EMAIL_HOST_PASSWORD = 'joe2810717'
+EMAIL_HOST_USER = 'your email'
+EMAIL_HOST_PASSWORD = 'your password'
 # 　記得開啟低安全性應用程式存取權：https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OCnd_0elVCODaTLz1gybpBV9aoyT5t7M9G4gByPBe0IdcK0tptAVin-zo6bSoi8lpKrKV-bQSNCVpuqNdvhjIL-vsHfA
