@@ -23,20 +23,12 @@ def registerPage(request):
             user = form.save()
             username = form.cleaned_data.get('username')
 
-            group = Group.objects.get(name="customer")
-            user.groups.add(group)  # 新建立用戶自動加入group = customer
-
-            Customer.objects.create(
-                user=user,
-                name=user.username,
-            )
-
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('login')
 
     context = {'form': form}
-    return render(request, 'accounts/register.html', context)
+    return render(request, 'accounts/originalRegister.html', context)
 
 
 @unauthenticated_user
@@ -54,15 +46,15 @@ def loginPage(request):
             messages.info(request, 'Username OR password is incorrect')
 
     context = {}
-    return render(request, 'accounts/register.html', context)
+    return render(request, 'accounts/login.html', context)
 
 
 def logoutUser(request):
     logout(request)
-    return redirect('register')
+    return redirect('login')
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @admin_only
 def home(request):
     orders = Order.objects.all()
@@ -84,7 +76,7 @@ def home(request):
     return render(request, 'accounts/dashboard.html', context=context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["customer"])
 def userPage(request):
     orders = request.user.customer.order_set.all()
@@ -103,7 +95,7 @@ def userPage(request):
     return render(request, 'accounts/user.html', context=context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["customer"])
 def accountSettings(request):
     customer = request.user.customer
@@ -118,7 +110,7 @@ def accountSettings(request):
     return render(request, 'accounts/accounts_settings.html', context=context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def product(request):
     products = Product.objects.all()
@@ -126,7 +118,7 @@ def product(request):
     return render(request, 'accounts/products.html', context=context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def customer(request, pk):
     customer = Customer.objects.get(id=pk)
@@ -146,7 +138,7 @@ def customer(request, pk):
     return render(request, 'accounts/customer.html', context=context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def createOrder(request, pk):
     # https://docs.djangoproject.com/zh-hans/3.2/topics/forms/modelforms/#inline-formsets
@@ -167,7 +159,7 @@ def createOrder(request, pk):
     return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 @allowed_users(allowed_roles=["admin"])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
@@ -184,7 +176,7 @@ def updateOrder(request, pk):
     return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='register')
+@login_required(login_url='login')
 def deleteOrder(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == 'POST':
