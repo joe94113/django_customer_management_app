@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -104,6 +104,21 @@ def userPage(request):
 
 
 @login_required(login_url='register')
+@allowed_users(allowed_roles=["customer"])
+def accountSettings(request):
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+
+    if request.method == "POST":
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+    return render(request, 'accounts/accounts_settings.html', context=context)
+
+
+@login_required(login_url='register')
 @allowed_users(allowed_roles=["admin"])
 def product(request):
     products = Product.objects.all()
@@ -143,7 +158,7 @@ def createOrder(request, pk):
         # print('Print POST:', request.POST)
         # form = OrderForm(request.POST)
         formset = OrderFormSet(request.POST, instance=customer)
-        if formset.is_valid():
+        if formset.is_valid():  # is_vaild : 建立在 form 底下的方法，可以用來驗證資料是否正確
             formset.save()
             return redirect("/")
 
