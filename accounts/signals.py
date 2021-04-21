@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from .models import Customer
 
 
-def customer_profile(sender, instance, created, **krgs):
+def customer_profile(sender, instance, created, **krgs):  # 記得要去app裡的app.py重寫ready function
     if created:
         group = Group.objects.get(name="customer")
         instance.groups.add(group)  # 新建立用戶自動加入group = customer
@@ -16,4 +16,4 @@ def customer_profile(sender, instance, created, **krgs):
         print('Profile Created')
 
 
-post_save.connect(customer_profile, sender=User)
+post_save.connect(customer_profile, sender=User)  # 創建傾聽器如果有用戶註冊自動分類

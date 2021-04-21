@@ -1,0 +1,97 @@
+{% load static %}
+{% for message in messages %}
+<h4>{{message}}</h4>
+{% endfor %}
+<link rel="stylesheet" type="text/css" href="{% static '/css/register.css' %}">
+
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="#" method="POST">
+            {% csrf_token %}
+			<h1>Create Account</h1>
+			<span>or use your email for registration</span>
+            {{form.username}}
+
+            {{form.email}}
+
+            {{form.password1}}
+
+            {{form.password2}}
+			<button>Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+			<h1>Sign in</h1>
+			<span>or use your account</span>
+			<input type="text" name="username" placeholder="Username..." class="form-control">
+			<input type="password" name="password" placeholder="Password..." class="form-control" >
+			<a href="#">Forgot your password?</a>
+			<button type="submit">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer>
+	<p>
+		Created with <i class="fa fa-heart"></i> by
+		<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+	</p>
+</footer>
+<script>
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+	container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+	container.classList.remove("right-panel-active");
+});
+
+var form_fields = document.getElementsByTagName('input')
+form_fields[1].placeholder='Username..';
+form_fields[2].placeholder='Email..';
+form_fields[3].placeholder='Enter password...';
+form_fields[4].placeholder='Re-enter Password...';
+
+
+
+for (var field in form_fields){
+    form_fields[field].className += ' form-control'
+}
+</script>
+<!--
+<form method="POST" action="">
+    {% csrf_token %}
+    {{form.username.label}}
+    {{form.username}}
+
+    {{form.email.label}}
+    {{form.email}}
+
+    {{form.password1.label}}
+    {{form.password1}}
+
+    {{form.password2.label}}
+    {{form.password2}}
+    <input type="submit" name="Create User">
+</form>
+-->
