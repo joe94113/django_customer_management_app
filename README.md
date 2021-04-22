@@ -2,6 +2,8 @@
 
 ### `run python manage.py runserver`
 
+### [->網站連結](https://joe94113-crm.herokuapp.com/login/?next=/)
+
 1.用戶登陸/忘記密碼寄email更改
 
 2.分隔超級用戶及普通客人頁面
@@ -9,6 +11,8 @@
 3.搜尋商品/新增刪除編輯商品(CRUD)
 
 4.運用AWS RDS託管資料庫(PostgresSQL)及靜態文件
+
+5.丟上heroku
 
 [Django DOCS](https://docs.djangoproject.com/zh-hans/3.1/)
 
