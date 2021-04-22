@@ -152,13 +152,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'a106510361@g2.usc.edu.tw'
-EMAIL_HOST_PASSWORD = 'joe2810717'
+EMAIL_HOST_USER = 'your google email'
+EMAIL_HOST_PASSWORD = 'your password'
 
 # S3 BUCKETS CONFIG
-AWS_ACCESS_KEY_ID = 'AKIATFVXGCRUSNNDHDXB'
-AWS_SECRET_ACCESS_KEY = 'RAOBXGyDXv7NK/20I32oRdLyAjOb4UWeBT3Hm+5o'
-AWS_STORAGE_BUCKET_NAME = 'joe94113-crm-bucket'
+AWS_ACCESS_KEY_ID = 'your buckets ID'
+AWS_SECRET_ACCESS_KEY = 'your buckets secret key'
+AWS_STORAGE_BUCKET_NAME = 'your storge name'
 # https://django-storages.readthedocs.io/en/latest/
 AWS_S3_FILE_OVERWRITE = False  # 上傳新文件是否覆蓋
 AWS_DEFAULT_ACL = None
