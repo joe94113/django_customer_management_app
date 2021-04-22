@@ -4,6 +4,8 @@
 
 ### [->網站連結](https://joe94113-crm.herokuapp.com/login/?next=/)
 
+密鑰推薦用.env擋儲存
+
 1.用戶登陸/忘記密碼寄email更改
 
 2.分隔超級用戶及普通客人頁面
