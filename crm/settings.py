@@ -13,8 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '3^to7n@@_3fvqkthud#9sem0koyg&5h^wqthsodn44r5&rmo4z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['joe94113-crm.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -45,6 +45,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -121,6 +124,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
@@ -132,18 +136,18 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # SMTP Configuration
-# 　記得開啟低安全性應用程式存取權：https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OCnd_0elVCODaTLz1gybpBV9aoyT5t7M9G4gByPBe0IdcK0tptAVin-zo6bSoi8lpKrKV-bQSNCVpuqNdvhjIL-vsHfA
+# 　記得開啟低安全性應用程式存取權才能寄信：https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OCnd_0elVCODaTLz1gybpBV9aoyT5t7M9G4gByPBe0IdcK0tptAVin-zo6bSoi8lpKrKV-bQSNCVpuqNdvhjIL-vsHfA
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your email'
-EMAIL_HOST_PASSWORD = 'your password'
+EMAIL_HOST_USER = 'a106510361@g2.usc.edu.tw'
+EMAIL_HOST_PASSWORD = 'joe2810717'
 
 # S3 BUCKETS CONFIG
 AWS_ACCESS_KEY_ID = 'AKIATFVXGCRUSNNDHDXB'
-AWS_SECRET_ACCESS_KEY = '*'
-AWS_STORAGE_BUCKET_NAME = '*'
+AWS_SECRET_ACCESS_KEY = 'RAOBXGyDXv7NK/20I32oRdLyAjOb4UWeBT3Hm+5o'
+AWS_STORAGE_BUCKET_NAME = 'joe94113-crm-bucket'
 # https://django-storages.readthedocs.io/en/latest/
 AWS_S3_FILE_OVERWRITE = False  # 上傳新文件是否覆蓋
 AWS_DEFAULT_ACL = None
