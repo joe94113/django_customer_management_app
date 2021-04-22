@@ -20,7 +20,7 @@ def registerPage(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():  # 如果表單已驗證
-            user = form.save()
+            form.save()
             username = form.cleaned_data.get('username')
 
             messages.success(request, 'Account was created for ' + username)

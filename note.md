@@ -55,3 +55,6 @@
    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+4. 換成AWS雲資料庫後，資料會不見，記得新建superuser跟groups

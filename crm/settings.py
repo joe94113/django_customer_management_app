@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
 
     'django_filters',  # pip install django-filter
+
+    'storages',  # pip install boto3
 ]
 
 MIDDLEWARE = [
@@ -139,12 +141,12 @@ EMAIL_HOST_USER = 'your email'
 EMAIL_HOST_PASSWORD = 'your password'
 
 # S3 BUCKETS CONFIG
-'''
-AWS_ACCESS_KEY_ID = '*****************'
-AWS_SECRET_ACCESS_KEY = '*****************'
-AWS_STORAGE_BUCKET_NAME = '*****************
-AWS_S3_FILE_OVERWRITE = False
+AWS_ACCESS_KEY_ID = 'AKIATFVXGCRUSNNDHDXB'
+AWS_SECRET_ACCESS_KEY = '*'
+AWS_STORAGE_BUCKET_NAME = '*'
+# https://django-storages.readthedocs.io/en/latest/
+AWS_S3_FILE_OVERWRITE = False  # 上傳新文件是否覆蓋
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-'''
+AWS_S3_REGION_NAME = 'us-east-2'  # 添加區域名稱，如果圖片跑不出來，去查看RDS設在哪一國，換成那國編號
