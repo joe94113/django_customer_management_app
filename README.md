@@ -14,7 +14,7 @@
 
 4.運用AWS RDS託管資料庫(PostgresSQL)及靜態文件
 
-5.丟上heroku
+5.部屬heroku
 
 [Django DOCS](https://docs.djangoproject.com/zh-hans/3.1/)
 
